@@ -7,15 +7,15 @@ import flask
 HERO_DATA = {}
 
 
-app = Flask(__name__)
+application = Flask(__name__)
 
 
-@app.route('/')
+@application.route('/')
 def hello_world():
     return 'Hello, World!'
 
 
-@app.route('/picks/<player_id>')
+@application.route('/picks/<player_id>')
 def get_picks(player_id):
     response = requests.get('https://api.opendota.com/api/players/%s/heroes?limit=50' % player_id)
     input_data = json.loads(response.text)
@@ -54,4 +54,4 @@ def get_icon_url(data):
     return 'http://cdn.dota2.com/apps/dota2/images/heroes/%s_sb.png' % hero
 
 if __name__ == '__main__':
-        app.run()
+        application.run()
