@@ -20,8 +20,12 @@
     </tr>
 	{% for i in range(10) %}
 		<tr>
-		<td><img src="{{picks[i]['icon']}}" alt="{{picks[i]['name']}}"> {{picks[i]['name']}}  Games:{{picks[i]['games']}}  Win:{{picks[i]['win']}}%</td>
-		<td><img src="{{bans[i]['icon']}}" alt="{{bans[i]['name']}}"> {{bans[i]['name']}}  Games:{{bans[i]['games']}}  Win:{{bans[i]['against_win']}}%</td>
+		{% if picks[i] %}
+			<td><img src="{{picks[i]['icon']}}" alt="{{picks[i]['name']}}"> {{picks[i]['name']}}  Games:{{picks[i]['games']}}  Win:{{picks[i]['win']}}%</td>
+		{% endif %}
+				{% if bans[i] %}
+			<td><img src="{{bans[i]['icon']}}" alt="{{bans[i]['name']}}"> {{bans[i]['name']}}  Games:{{bans[i]['games']}}  Win:{{bans[i]['against_win']}}%</td>
+		{% endif %}
 		</tr>
 	{%- endfor %}
   </table> 
