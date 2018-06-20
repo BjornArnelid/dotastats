@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Pick Suggestions</title>
+  <style>
+	table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+	}
+    th, td {
+      padding: 15px;
+    }
+  </style>
+</head>
+<body>
+  <table style="width:100%">
+    <tr>
+      <th>Picks</th>
+      <th>Bans</th>
+    </tr>
+	{% for i in range(10) %}
+		<tr>
+		<td><img src="{{picks[i]['icon']}}" alt="{{picks[i]['name']}}"> {{picks[i]['name']}}  Games:{{picks[i]['games']}}  Win:{{picks[i]['win']}}%</td>
+		<td><img src="{{bans[i]['icon']}}" alt="{{bans[i]['name']}}"> {{bans[i]['name']}}  Games:{{bans[i]['games']}}  Win:{{bans[i]['against_win']}}%</td>
+		</tr>
+	{%- endfor %}
+  </table> 
+</body>
+</html>
