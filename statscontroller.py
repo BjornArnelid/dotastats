@@ -6,8 +6,8 @@ class StatsController(object):
     def __init__(self):
         self.hero_data = load_hero_data()
 
-    def get_suggestions(self, player_id):
-        response = requests.get('https://api.opendota.com/api/players/%s/heroes?limit=50' % player_id)
+    def get_suggestions(self, player_id, sample):
+        response = requests.get('https://api.opendota.com/api/players/%s/heroes?limit=%s' % (player_id,sample))
         input_data = json.loads(response.text)
         wins = 0
         picks = []
@@ -22,7 +22,7 @@ class StatsController(object):
         picks = [h for h in picks if h['win'] > win_percentage]
         bans = [h for h in bans if h['against_win'] < win_percentage]
         bans = sorted(bans, key=lambda against: against['games'], reverse=True)
-        return {'picks': picks, 'bans': bans}
+        return {'avg_win': win_percentage, 'sample': sample, 'picks': picks, 'bans': bans}
 
     def get_hero(self, hero):
         tmp = {}
@@ -60,6 +60,5 @@ def load_hero_data():
     return tmp_data
 
 def get_icon_url(data):
-    #"npc_dota_hero_antimage"
     hero = data['name'][14:]
     return 'http://cdn.dota2.com/apps/dota2/images/heroes/%s_sb.png' % hero
