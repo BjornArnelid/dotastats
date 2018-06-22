@@ -9,7 +9,7 @@ application = Flask(__name__)
 
 
 @application.route('/')
-def hello_world():
+def landing_page():
     # we'''
     return """
 <head>
@@ -32,7 +32,10 @@ def redirect_picks():
 
 @application.route('/picks/<player_id>')
 def get_picks(player_id):
-    sample=50
+    if request.args.get('sample'):
+        sample = request.args['sample']
+    else:
+        sample=50
     result = CONTROLLER.get_suggestions(player_id, sample)
     if request.accept_mimetypes.accept_html:
         return flask.render_template('picks.html', picks=result['picks'], bans=result['bans'],
