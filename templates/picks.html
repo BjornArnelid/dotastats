@@ -23,9 +23,13 @@
 		<tr>
 		{% if picks[i] %}
 			<td><img src="{{picks[i]['icon']}}" alt="{{picks[i]['name']}}"> {{picks[i]['name']}}  Games:{{picks[i]['games']}}  Win:{{picks[i]['win']}}%</td>
+		{% else %}
+			<td /> 
 		{% endif %}
-				{% if bans[i] %}
+		{% if bans[i] %}
 			<td><img src="{{bans[i]['icon']}}" alt="{{bans[i]['name']}}"> {{bans[i]['name']}}  Games:{{bans[i]['games']}}  Win:{{bans[i]['against_win']}}%</td>
+		{% else %}
+			<td /> 
 		{% endif %}
 		</tr>
 	{%- endfor %}
