@@ -16,18 +16,18 @@ def landing_page():
   <title>Choose hero</title>
 </head>
 <body>
-    <form action="/picks/redirect">
+    <form action="/picks" method="GET">
       <p><input type=text name=id>
-         <input type=submit value=Kör>
+         <input type=submit value=Get>
     </form>
 </body>
 </html>
 """
 
-# Should allow post
-@application.route('/picks/redirect', methods=['POST'])
+
+@application.route('/picks', methods=['GET'])
 def redirect_picks():
-    return flask.redirect('/picks/%s' % request.form['id'])
+    return get_picks(request.values['id'])
 
 
 @application.route('/picks/<player_id>')
