@@ -13,7 +13,7 @@
   </style>
 </head>
 <body>
-  Sample size: {{sample}}  win: {{avg}}%
+  Sample size: {{sample}}  win: {{avg|round(1)}}%
   <table style="width:100%">
     <tr>
       <th>Picks</th>
@@ -22,12 +22,12 @@
 	{% for i in range(10) %}
 		<tr>
 		{% if picks[i] %}
-			<td><img src="{{picks[i]['icon']}}" alt="{{picks[i]['name']}}"> {{picks[i]['name']}}  Games:{{picks[i]['games']}}  Win:{{picks[i]['win']}}%</td>
+			<td><img src="{{picks[i]['icon']}}" alt="{{picks[i]['name']}}"> {{picks[i]['name']}}  Games:{{picks[i]['games']}}  Win:{{picks[i]['win']|round(1)}}%</td>
 		{% else %}
 			<td /> 
 		{% endif %}
 		{% if bans[i] %}
-			<td><img src="{{bans[i]['icon']}}" alt="{{bans[i]['name']}}"> {{bans[i]['name']}}  Games:{{bans[i]['games']}}  Win:{{bans[i]['against_win']}}%</td>
+			<td><img src="{{bans[i]['icon']}}" alt="{{bans[i]['name']}}"> {{bans[i]['name']}}  Games:{{bans[i]['games']}}  Win:{{bans[i]['against_win']|round(1)}}%</td>
 		{% else %}
 			<td /> 
 		{% endif %}
