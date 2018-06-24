@@ -27,16 +27,16 @@ def landing_page():
 
 @application.route('/picks', methods=['GET'])
 def redirect_picks():
-    return get_picks(request.values['id'])
-
+    return flask.redirect('/picks/%s' % request.values['id'])
+ 
 
 @application.route('/picks/<player_id>')
 def get_picks(player_id):
-    if request.args.get('sample'):
-        sample = request.args['sample']
-    else:
-        sample=50
-    result = CONTROLLER.get_suggestions(player_id, sample)
+    sample = request.args.get('sample')
+    if not sample:
+        sample = 50
+    mode = request.args.get('mode')
+    result = CONTROLLER.get_suggestions(player_id, sample, mode)
     if request.accept_mimetypes.accept_html:
         return flask.render_template('picks.html', picks=result['picks'], bans=result['bans'],
                                      avg=result['avg_win'], sample=result['sample'])

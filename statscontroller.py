@@ -6,8 +6,14 @@ class StatsController(object):
     def __init__(self):
         self.hero_data = load_hero_data()
 
-    def get_suggestions(self, player_id, sample):
-        response = requests.get('https://api.opendota.com/api/players/%s/heroes?limit=%s' % (player_id,sample))
+    def get_suggestions(self, player_id, sample, mode=''):
+        if mode == 'turbo':
+            mode = '&significant=0&game_mode=23'
+        elif mode == 'ranked':
+            mode = '&lobby_type=7'
+        elif mode == 'unranked':
+            mode = '&lobby_type=0'
+        response = requests.get('https://api.opendota.com/api/players/%s/heroes?limit=%s%s' % (player_id,sample,mode))
         input_data = json.loads(response.text)
         wins = 0
         picks = []
@@ -61,7 +67,6 @@ def filter_bans(bans, picks, win):
 def not_in_list(hero, hero_list):
     for other in hero_list:
         if hero['name'] == other['name']:
-            print(hero['name'])
             return False
     return True
 
