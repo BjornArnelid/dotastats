@@ -28,8 +28,9 @@ class StatsController(object):
                 bans.append(self.get_opponent(hero)) 
         win_percentage = (wins / int(sample)) * 100
         picks = [h for h in picks if h['win'] > win_percentage]
+        picks = sorted(picks, key=lambda pick: (pick['games'], pick['win']), reverse=True)
         bans = filter_bans(bans, picks, win_percentage)
-        bans = sorted(bans, key=lambda against: against['games'], reverse=True)
+        bans = sorted(bans, key=lambda against: (against['games'], against['against_win']), reverse=True)
         return {'avg_win': win_percentage, 'sample': sample, 'picks': picks, 'bans': bans}
 
     def get_hero(self, hero):
