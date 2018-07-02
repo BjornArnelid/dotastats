@@ -17,7 +17,7 @@ def landing_page():
 </head>
 <body>
     <form action="/picks" method="GET">
-      <p><input type=text name=id>
+      <input type=text name=id>
          <input type=submit value=Get>
     </form>
 </body>
@@ -34,7 +34,7 @@ def redirect_picks():
 def get_picks(player_id):
     sample = request.args.get('sample')
     if not sample:
-        sample = 50
+        sample = 75
     mode = request.args.get('mode')
     result = CONTROLLER.get_suggestions(player_id, sample, mode)
     if request.accept_mimetypes.accept_html:
