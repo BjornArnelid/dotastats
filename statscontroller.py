@@ -17,21 +17,23 @@ class StatsController(object):
             mode=''
         response = requests.get('https://api.opendota.com/api/players/%s/heroes?limit=%s%s' % (player_id,sample,mode))
         input_data = json.loads(response.text)
+        games = 0
         wins = 0
         picks = []
         bans = []
         for hero in input_data:
+            games += hero['games']
             if hero['win'] > 0:
                 wins += hero['win']
                 picks.append(self.get_hero(hero))
             if hero['against_games'] > 0:
                 bans.append(self.get_opponent(hero)) 
-        win_percentage = (wins / int(sample)) * 100
+        win_percentage = (wins / int(games)) * 100
         picks = [h for h in picks if h['win'] > win_percentage]
         picks = sorted(picks, key=lambda pick: (pick['games'], pick['win']), reverse=True)
         bans = filter_bans(bans, picks, win_percentage)
         bans = sorted(bans, key=lambda against: (against['games'], against['against_win']), reverse=True)
-        return {'avg_win': win_percentage, 'sample': sample, 'picks': picks, 'bans': bans}
+        return {'avg_win': win_percentage, 'sample': games, 'picks': picks, 'bans': bans}
 
     def get_hero(self, hero):
         tmp = {}
