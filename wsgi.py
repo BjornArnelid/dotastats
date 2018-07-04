@@ -2,6 +2,7 @@ import flask
 from flask import Flask
 from flask.globals import request
 from statscontroller import StatsController
+from flask.helpers import url_for
 
 
 CONTROLLER = StatsController()
@@ -17,9 +18,16 @@ def landing_page():
 </head>
 <body>
     <form action="/picks" method="GET">
-      <input type=text name=id>
-         <input type=submit value=Get>
+      ID <input type=text name=id>  Mode 
+        <select name="mode">
+          <option value="">Significant</option>
+          <option value="turbo">Turbo</option>
+          <option value="ranked">Ranked</option>
+          <option value="unranked">Unranked</option>
+        </select></br>
+        <input type=submit value=Get>
     </form>
+
 </body>
 </html>
 """
@@ -27,7 +35,7 @@ def landing_page():
 
 @application.route('/picks', methods=['GET'])
 def redirect_picks():
-    return flask.redirect('/picks/%s' % request.values['id'])
+    return flask.redirect(url_for('get_picks', player_id=request.values['id'], mode=request.values['mode']))
  
 
 @application.route('/picks/<player_id>')
