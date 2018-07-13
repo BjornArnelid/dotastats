@@ -11,26 +11,10 @@ application = Flask(__name__)
 
 @application.route('/')
 def landing_page():
-    # we'''
-    return """
-<head>
-  <title>Choose hero</title>
-</head>
-<body>
-    <form action="/picks" method="GET">
-      ID <input type=text name=id>  Mode 
-        <select name="mode">
-          <option value="">Significant</option>
-          <option value="turbo">Turbo</option>
-          <option value="ranked">Ranked</option>
-          <option value="unranked">Unranked</option>
-        </select></br>
-        <input type=submit value=Get>
-    </form>
-
-</body>
-</html>
-"""
+    player_id = request.args.get('id')
+    if not player_id:
+        player_id = ''
+    return flask.render_template('index.html', id=player_id)
 
 
 @application.route('/picks', methods=['GET'])
