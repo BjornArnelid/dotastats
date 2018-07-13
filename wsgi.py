@@ -30,8 +30,7 @@ def get_picks(player_id):
     mode = request.args.get('mode')
     result = CONTROLLER.get_suggestions(player_id, sample, mode)
     if request.accept_mimetypes.accept_html:
-        return flask.render_template('picks.html', picks=result['picks'], bans=result['bans'],
-                                     avg=result['avg_win'], sample=result['sample'])
+        return flask.render_template('picks.html', result=result, id=player_id)
     elif request.accept_mimetypes.accept_json:
         return flask.jsonify(result)
     else:

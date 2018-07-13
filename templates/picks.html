@@ -13,12 +13,14 @@
   </style>
 </head>
 <body>
-  Sample size: {{sample}}  win: {{avg|round(1)}}%
+  Sample size: {{result['sample']}}  win: {{result['avg_win']|round(1)}}%
   <table style="width:100%">
     <tr>
       <th>Picks</th>
       <th>Bans</th>
     </tr>
+    {% set picks = result['picks'] %}
+    {% set bans = result['bans'] %}
 	{% for i in range(10) %}
 		<tr>
 		{% if picks[i] %}
@@ -33,6 +35,7 @@
 		{% endif %}
 		</tr>
 	{%- endfor %}
-  </table> 
+  </table>
+  <a href="/?id={{id}}">back</a>
 </body>
 </html>
