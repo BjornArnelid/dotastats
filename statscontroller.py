@@ -4,7 +4,8 @@ import json
 
 class StatsController(object):
     def __init__(self):
-        self.hero_data = load_hero_data()
+        with open('heroes.json') as f:
+            self.hero_data = json.load(f)
 
     def get_suggestions(self, player_id, sample, mode):
         if mode == 'turbo':
@@ -40,7 +41,7 @@ class StatsController(object):
         try:
             hd = self.hero_data[hero['hero_id']]
         except KeyError:
-            self.hero_data = load_hero_data()
+            self.load_hero_data()
             hd =  self.hero_data[hero['hero_id']]
         tmp['name'] = hd['localized_name']
         tmp['icon'] = get_icon_url(hd)
@@ -53,13 +54,23 @@ class StatsController(object):
         try:
             hd = self.hero_data[hero['hero_id']]
         except KeyError:
-            self.hero_data = load_hero_data()
+            self.load_hero_data()
             hd =  self.hero_data[hero['hero_id']]
         tmp['name'] = hd['localized_name']
         tmp['icon'] = get_icon_url(hd)
         tmp['games'] = hero['against_games']
         tmp['against_win'] = (hero['against_win'] / hero['against_games']) * 100
         return tmp
+
+    def load_hero_data(self):
+        response = requests.get('https://api.opendota.com/api/heroes')
+        input_data = json.loads(response.text)
+        tmp_data = {}
+        for data in input_data:
+            tmp_data[str(data['id'])] = data
+        self.hero_data = tmp_data
+        with open('heroes.json',  'w') as f:
+            json.dump(self.hero_data, f)
 
 
 def filter_bans(bans, picks, win):
@@ -75,14 +86,6 @@ def not_in_list(hero, hero_list):
             return False
     return True
 
-
-def load_hero_data():
-    response = requests.get('https://api.opendota.com/api/heroes')
-    input_data = json.loads(response.text)
-    tmp_data = {}
-    for data in input_data:
-        tmp_data[str(data['id'])] = data
-    return tmp_data
 
 def get_icon_url(data):
     hero = data['name'][14:]
