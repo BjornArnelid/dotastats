@@ -28,7 +28,10 @@ def get_picks(player_id):
     if not sample:
         sample = 75
     mode = request.args.get('mode')
-    result = CONTROLLER.get_suggestions(player_id, sample, mode)
+    try:
+        result = CONTROLLER.get_suggestions(player_id, sample, mode)
+    except TypeError:
+        flask.abort(400)
     if request.accept_mimetypes.accept_html:
         return flask.render_template('picks.html', result=result, id=player_id)
     elif request.accept_mimetypes.accept_json:
