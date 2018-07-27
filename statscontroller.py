@@ -2,6 +2,10 @@ import requests
 import json
 
 
+with open('heroes.json') as f:
+        HERO_INFORMATION = json.load(f)
+
+
 class StatsController(object):
     def __init__(self):
         with open('heroes.json') as f:
@@ -26,58 +30,60 @@ class StatsController(object):
             games += hero['games']
             if hero['win'] > 0:
                 wins += hero['win']
-                picks.append(self.get_hero(hero))
+                picks.append(Hero(hero))
             if hero['against_games'] > 0:
-                bans.append(self.get_opponent(hero)) 
+                bans.append(Hero(hero)) 
         win_percentage = (wins / int(games)) * 100
-        picks = [h for h in picks if h['win'] > win_percentage]
-        picks = sorted(picks, key=lambda pick: (pick['games'], pick['win']), reverse=True)
-        bans = filter_bans(bans, picks, win_percentage)
-        bans = sorted(bans, key=lambda against: (against['games']*-1, against['against_win']))
+        picks = [h for h in picks if h.winrate > win_percentage]
+        picks = sorted(picks, key=pick_by_quantity, reverse=True)
+        bans = filter_bans(bans, win_percentage)
+        bans = sorted(bans, key=ban_by_quantity, reverse=True)
         return {'avg_win': win_percentage, 'sample': games, 'picks': picks, 'bans': bans}
 
-    def get_hero(self, hero):
-        tmp = {}
+
+class Hero(object):
+    def __init__(self, hero_stats):
+        for k, v in hero_stats.items():
+            setattr(self, k, v)
+    
+    @property
+    def winrate(self):
         try:
-            hd = self.hero_data[hero['hero_id']]
-        except KeyError:
-            self.load_hero_data()
-            hd =  self.hero_data[hero['hero_id']]
-        tmp['name'] = hd['localized_name']
-        tmp['icon'] = get_icon_url(hd)
-        tmp['games'] = hero['games']
-        tmp['win'] = (hero['win'] / hero['games']) * 100
-        return tmp
-
-    def get_opponent(self, hero):
-        tmp = {}
+            return (self.win / self.games) * 100
+        except ZeroDivisionError:
+            return 0
+    
+    @property
+    def against_winrate(self):
         try:
-            hd = self.hero_data[hero['hero_id']]
-        except KeyError:
-            self.load_hero_data()
-            hd =  self.hero_data[hero['hero_id']]
-        tmp['name'] = hd['localized_name']
-        tmp['icon'] = get_icon_url(hd)
-        tmp['games'] = hero['against_games']
-        tmp['against_win'] = (hero['against_win'] / hero['against_games']) * 100
-        return tmp
+            return  (self.against_win / self.against_games) * 100
+        except ZeroDivisionError:
+            return 0
 
-    def load_hero_data(self):
-        response = requests.get('https://api.opendota.com/api/heroes')
-        input_data = json.loads(response.text)
-        tmp_data = {}
-        for data in input_data:
-            tmp_data[str(data['id'])] = data
-        self.hero_data = tmp_data
-        with open('heroes.json',  'w') as f:
-            json.dump(self.hero_data, f)
+    @property
+    def with_winrate(self):
+        try:
+            return (self.with_win / self.with_games) * 100
+        except ZeroDivisionError:
+            return 0
 
+    @property
+    def name(self):
+        hi = HERO_INFORMATION[self.hero_id]
+        if not hi:
+            reload_hero_information()
+            hi = HERO_INFORMATION[self.hero_id]
+        return hi['localized_name']
+    
+    @property
+    def icon(self):
+        return get_icon_url(HERO_INFORMATION[self.hero_id])
+ 
 
-def filter_bans(bans, picks, win):
+def filter_bans(bans, avg_win):
     for ban in bans:
-        if ban['against_win'] < win:
-            if not_in_list(ban, picks):
-                yield ban
+        if ban.against_games > ban.games and ban.against_winrate < avg_win:
+            yield ban
  
  
 def not_in_list(hero, hero_list):
@@ -90,3 +96,20 @@ def not_in_list(hero, hero_list):
 def get_icon_url(data):
     hero = data['name'][14:]
     return 'http://cdn.dota2.com/apps/dota2/images/heroes/%s_sb.png' % hero
+
+
+def pick_by_quantity(hero):
+    return (hero.games, hero.winrate, hero.against_games, 100-hero.against_winrate)
+
+
+def ban_by_quantity(hero):
+    return (hero.against_games, 100-hero.against_winrate, hero.with_games, hero.with_winrate)
+
+
+def reload_hero_information():
+    response = requests.get('https://api.opendota.com/api/heroes')
+    input_data = json.loads(response.text)
+    for data in input_data:
+        HERO_INFORMATION[str(data['id'])] = data
+    with open('heroes.json',  'w') as f:
+        json.dump(HERO_INFORMATION, f)

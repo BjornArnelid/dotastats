@@ -24,12 +24,12 @@
 	{% for i in range(10) %}
 		<tr>
 		{% if picks[i] %}
-			<td><img src="{{picks[i]['icon']}}" alt="{{picks[i]['name']}}"> {{picks[i]['name']}}  Games:{{picks[i]['games']}}  Win:{{picks[i]['win']|round(1)}}%</td>
+			<td><img src="{{picks[i].icon}}" alt="{{picks[i].name}}"> {{picks[i].name}}  Games:{{picks[i].games}}  Win:{{picks[i].winrate|round(1)}}%</td>
 		{% else %}
 			<td /> 
 		{% endif %}
 		{% if bans[i] %}
-			<td><img src="{{bans[i]['icon']}}" alt="{{bans[i]['name']}}"> {{bans[i]['name']}}  Games:{{bans[i]['games']}}  Win:{{bans[i]['against_win']|round(1)}}%</td>
+			<td><img src="{{bans[i].icon}}" alt="{{bans[i].name}}"> {{bans[i].name}}  Games:{{bans[i].against_games}}  Win:{{bans[i].against_winrate|round(1)}}%</td>
 		{% else %}
 			<td /> 
 		{% endif %}
