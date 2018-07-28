@@ -1,5 +1,6 @@
 import requests
 import json
+from perspectives import QuantityPerspective, WinratePerspective
 
 
 with open('heroes.json') as f:
@@ -11,7 +12,7 @@ class StatsController(object):
         with open('heroes.json') as f:
             self.hero_data = json.load(f)
 
-    def get_suggestions(self, player_id, sample, mode):
+    def get_suggestions(self, player_id, sample, mode, sort_order):
         if mode == 'turbo':
             mode = '&significant=0&game_mode=23'
         elif mode == 'ranked':
@@ -35,9 +36,13 @@ class StatsController(object):
                 bans.append(Hero(hero)) 
         win_percentage = (wins / int(games)) * 100
         picks = [h for h in picks if h.winrate > win_percentage]
-        picks = sorted(picks, key=pick_by_quantity, reverse=True)
-        bans = filter_bans(bans, win_percentage)
-        bans = sorted(bans, key=ban_by_quantity, reverse=True)
+        if sort_order == 'winrate':
+            perspective = WinratePerspective()
+        else:
+            perspective = QuantityPerspective()
+        picks = sorted(picks, key=perspective.sort_picks, reverse=True)
+        bans = perspective.filter_bans(bans, win_percentage)
+        bans = sorted(bans, key=perspective.sort_bans, reverse=True)
         return {'avg_win': win_percentage, 'sample': games, 'picks': picks, 'bans': bans}
 
 
@@ -78,32 +83,11 @@ class Hero(object):
     @property
     def icon(self):
         return get_icon_url(HERO_INFORMATION[self.hero_id])
- 
-
-def filter_bans(bans, avg_win):
-    for ban in bans:
-        if ban.against_games > ban.games and ban.against_winrate < avg_win:
-            yield ban
- 
- 
-def not_in_list(hero, hero_list):
-    for other in hero_list:
-        if hero['name'] == other['name']:
-            return False
-    return True
 
 
 def get_icon_url(data):
     hero = data['name'][14:]
     return 'http://cdn.dota2.com/apps/dota2/images/heroes/%s_sb.png' % hero
-
-
-def pick_by_quantity(hero):
-    return (hero.games, hero.winrate, hero.against_games, 100-hero.against_winrate)
-
-
-def ban_by_quantity(hero):
-    return (hero.against_games, 100-hero.against_winrate, hero.with_games, hero.with_winrate)
 
 
 def reload_hero_information():
