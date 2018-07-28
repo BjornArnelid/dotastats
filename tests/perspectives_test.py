@@ -1,5 +1,5 @@
-from perspectives import QuantityPerspective, WinratePerspective
-from statscontroller import Hero
+from perspectives import QuantityPerspective, WinratePerspective, DiffPerspective
+from hero import Hero
 
 
 sample_1 = Hero({"hero_id":"30","last_played":1532238030,"games":5,"win":2,"with_games":4,"with_win":2,"against_games":5,"against_win":4})
@@ -13,7 +13,7 @@ def test_pick_by_quantity():
 
 def test_ban_by_quantity():
     perspective = QuantityPerspective()
-    assert perspective.sort_bans(sample_1) == (5, 20, 4, 50)
+    assert perspective.sort_bans(sample_1) == (5, 20, -4, 50)
 
 
 def test_filter_by_quantity():
@@ -29,10 +29,26 @@ def test_pick_by_winrate():
 
 def test_ban_by_winrate():
     perspective = WinratePerspective()
-    assert perspective.sort_bans(sample_1) == (20, 5, 50, 4)
+    assert perspective.sort_bans(sample_1) == (20, 5, 50, -4)
 
 
 def test_filter_by_winrate():
     perspective = WinratePerspective()
+    bans = perspective.filter_bans([sample_1, sample_2], 100)
+    assert len(list(bans)) == 2
+
+
+def test_pick_by_diff():
+    perspective = DiffPerspective()
+    assert perspective.sort_picks(sample_1) == (-1, 5, -3, 5)
+
+
+def test_ban_by_diff():
+    perspective = DiffPerspective()
+    assert perspective.sort_bans(sample_1) == (-3, 5, 0, -4)
+
+
+def test_filter_by_diff():
+    perspective = DiffPerspective()
     bans = perspective.filter_bans([sample_1, sample_2], 100)
     assert len(list(bans)) == 2
