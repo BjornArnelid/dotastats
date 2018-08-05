@@ -5,12 +5,19 @@
 </head>
 <body>
     <form action="/picks" method="GET">
-      Player ID <input type=text name=id value={{id}}>  Mode 
+      Player ID <input type=text name=id value={{id}}>  
+      Mode 
         <select name="mode">
           <option value="">Significant</option>
           <option value="turbo">Turbo</option>
           <option value="ranked">Ranked</option>
           <option value="unranked">Unranked</option>
+        </select>
+        Sort 
+        <select name="sort">
+          <option value="">Diff</option>
+          <option value="quantity">Quatity</option>
+          <option value="winrate">Winrate</option>
         </select></br>
         <input type=submit value=Get>
     </form>

@@ -19,7 +19,10 @@ def landing_page():
 
 @application.route('/picks', methods=['GET'])
 def redirect_picks():
-    return flask.redirect(url_for('get_picks', player_id=request.values['id'], mode=request.values['mode']))
+    return flask.redirect(url_for('get_picks',
+                                  player_id=request.values['id'],
+                                  mode=request.values['mode'],
+                                  sortOrder=request.values['sort']))
  
 
 @application.route('/picks/<player_id>')
@@ -35,9 +38,6 @@ def get_picks(player_id):
         flask.abort(400)
     if request.accept_mimetypes.accept_html:
         return flask.render_template('picks.html', result=result, id=player_id)
-    elif request.accept_mimetypes.accept_json:
-        # TODO Fix this!
-        return flask.jsonify(result)
     else:
         flask.abort(415)
 
