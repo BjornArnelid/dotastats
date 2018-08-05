@@ -35,7 +35,8 @@ class StatsController(object):
             perspective = WinratePerspective()
         elif sort_order == 'quantity':
             perspective = QuantityPerspective()
-        else: 
+        else:
+            sort_order = 'significant'
             perspective = DiffPerspective()
         picks = sorted(picks, key=perspective.sort_picks, reverse=True)
         bans = perspective.filter_bans(bans, win_percentage)

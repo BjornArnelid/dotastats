@@ -13,6 +13,9 @@
   </style>
 </head>
 <body>
+  {% if result['mode'] %}
+    <H3> {{result['mode']}} matchmaking </H3>
+  {% endif %}
   Sample size: {{result['sample']}}  win: {{result['avg_win']|round(1)}}%
   <table style="width:100%">
     <tr>

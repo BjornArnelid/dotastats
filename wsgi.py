@@ -34,6 +34,7 @@ def get_picks(player_id):
     sort_order = request.args.get('sortOrder')
     try:
         result = CONTROLLER.get_suggestions(player_id, sample, mode, sort_order)
+        result['mode'] = mode
     except TypeError:
         flask.abort(400)
     if request.accept_mimetypes.accept_html:
