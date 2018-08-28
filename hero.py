@@ -5,6 +5,7 @@ import requests
 with open('heroes.json') as f:
         HERO_INFORMATION = json.load(f)
 
+DEFAULT = {'localized_name': 'Unknown', 'name': 'unknown'}
 
 class Hero(object):
     def __init__(self, hero_stats):
@@ -47,21 +48,26 @@ class Hero(object):
 
     @property
     def name(self):
-        hi = HERO_INFORMATION[self.hero_id]
-        if not hi:
-            reload_hero_information()
-            hi = HERO_INFORMATION[self.hero_id]
+        hi = get_hero_from_id(self.hero_id)
         return hi['localized_name']
     
     @property
     def icon(self):
-        return get_icon_url(HERO_INFORMATION[self.hero_id])
+        return get_icon_url(get_hero_from_id(self.hero_id))
 
 
 def get_icon_url(data):
     hero = data['name'][14:]
     return 'http://cdn.dota2.com/apps/dota2/images/heroes/%s_sb.png' % hero
 
+
+def get_hero_from_id(hero_id):
+    if not hero_id in HERO_INFORMATION:
+        reload_hero_information()
+    hi = HERO_INFORMATION.get(hero_id)
+    if not hi:
+        hi = DEFAULT
+    return hi 
 
 def reload_hero_information():
     response = requests.get('https://api.opendota.com/api/heroes')

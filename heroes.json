@@ -1608,5 +1608,19 @@
 			"Initiator"
 		],
 		"legs": 2
+	},
+	"115": {
+		"name": "npc_dota_hero_grimstroke",
+		"attack_type": "Ranged",
+		"localized_name": "Grimstroke",
+		"primary_attr": "int",
+		"id": 121,
+		"roles": [
+			"Support",
+			"Nuker",
+			"Disabler",
+			"Escape"
+		],
+		"legs": 2
 	}
 }
