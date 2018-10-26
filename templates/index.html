@@ -5,21 +5,23 @@
 </head>
 <body>
     <form action="/picks" method="GET">
-      Player ID <input type=text name=id value={{id}}>  
-      Mode 
-        <select name="mode">
+    Player ID <input type=text name=id value={{id}}></br>
+    Sample size <input type=text name=sample value=75></br>
+    Allies <input type=text name=allies >
+    Mode
+      <select name="mode">
           <option value="">Significant</option>
           <option value="turbo">Turbo</option>
           <option value="ranked">Ranked</option>
           <option value="unranked">Unranked</option>
-        </select>
-        Sort 
-        <select name="sort">
+      </select>
+    Sort
+      <select name="sort">
           <option value="">Diff</option>
           <option value="quantity">Quantity</option>
           <option value="winrate">Winrate</option>
-        </select></br>
-        <input type=submit value=Get>
+      </select></br>
+    <input type=submit value=Get>
     </form>
 </body>
 </html></html>

@@ -21,11 +21,12 @@ def landing_page():
 def redirect_picks():
     return flask.redirect(url_for('get_picks',
                                   player_id=request.values['id'],
+                                  sample=request.values['sample'],
+                                  allies=request.values['allies'],
                                   mode=request.values['mode'],
                                   sortOrder=request.values['sort']))
  
 
-# included_account_id=183525353
 @application.route('/picks/<player_id>')
 def get_picks(player_id):
     sample = request.args.get('sample')
@@ -33,9 +34,9 @@ def get_picks(player_id):
         sample = 75
     mode = request.args.get('mode')
     sort_order = request.args.get('sortOrder')
-    allied = request.args.get('allied')
+    allies = request.args.get('allies')
     try:
-        result = CONTROLLER.get_suggestions(player_id, sample, mode, sort_order, allied)
+        result = CONTROLLER.get_suggestions(player_id, sample, mode, sort_order, allies)
         result['mode'] = mode
     except TypeError:
         flask.abort(400)

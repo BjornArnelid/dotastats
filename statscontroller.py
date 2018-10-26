@@ -5,7 +5,7 @@ from hero import Hero
 
 
 class StatsController(object):
-    def get_suggestions(self, player_id, sample, mode, sort_order, allied):
+    def get_suggestions(self, player_id, sample, mode, sort_order, allies):
         attributes = 'limit=%s' % sample
         if mode == 'turbo':
             attributes += '&significant=0&game_mode=23'
@@ -13,8 +13,8 @@ class StatsController(object):
             attributes += '&lobby_type=7'
         elif mode == 'unranked':
             attributes += '&lobby_type=0'
-        if allied:
-            attributes += '&included_account_id=%s' % allied
+        if allies:
+            attributes += '&included_account_id=%s' % allies
 
         response = requests.get('https://api.opendota.com/api/players/%s/heroes?%s' % (player_id, attributes))
         input_data = json.loads(response.text)
