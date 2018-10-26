@@ -1,22 +1,22 @@
 import requests
 import json
-from perspectives import QuantityPerspective, WinratePerspective,\
-    DiffPerspective
+from perspectives import QuantityPerspective, WinratePerspective, DiffPerspective
 from hero import Hero
 
 
-
 class StatsController(object):
-    def get_suggestions(self, player_id, sample, mode, sort_order):
+    def get_suggestions(self, player_id, sample, mode, sort_order, allied):
+        attributes = 'limit=%s' % sample
         if mode == 'turbo':
-            mode = '&significant=0&game_mode=23'
+            attributes += '&significant=0&game_mode=23'
         elif mode == 'ranked':
-            mode = '&lobby_type=7'
+            attributes += '&lobby_type=7'
         elif mode == 'unranked':
-            mode = '&lobby_type=0'
-        else:
-            mode=''
-        response = requests.get('https://api.opendota.com/api/players/%s/heroes?limit=%s%s' % (player_id,sample,mode))
+            attributes += '&lobby_type=0'
+        if allied:
+            attributes += '&included_account_id=%s' % allied
+
+        response = requests.get('https://api.opendota.com/api/players/%s/heroes?%s' % (player_id, attributes))
         input_data = json.loads(response.text)
         games = 0
         wins = 0
@@ -24,11 +24,12 @@ class StatsController(object):
         bans = []
         for hero in input_data:
             games += hero['games']
+            h = Hero(hero)
             if hero['win'] > 0:
                 wins += hero['win']
-                picks.append(Hero(hero))
+                picks.append(h)
             if hero['against_games'] > 0:
-                bans.append(Hero(hero)) 
+                bans.append(h) 
         win_percentage = (wins / int(games)) * 100
         picks = [h for h in picks if h.winrate > win_percentage]
         if sort_order == 'winrate':

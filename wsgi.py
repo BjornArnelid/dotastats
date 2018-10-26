@@ -25,6 +25,7 @@ def redirect_picks():
                                   sortOrder=request.values['sort']))
  
 
+# included_account_id=183525353
 @application.route('/picks/<player_id>')
 def get_picks(player_id):
     sample = request.args.get('sample')
@@ -32,8 +33,9 @@ def get_picks(player_id):
         sample = 75
     mode = request.args.get('mode')
     sort_order = request.args.get('sortOrder')
+    allied = request.args.get('allied')
     try:
-        result = CONTROLLER.get_suggestions(player_id, sample, mode, sort_order)
+        result = CONTROLLER.get_suggestions(player_id, sample, mode, sort_order, allied)
         result['mode'] = mode
     except TypeError:
         flask.abort(400)

@@ -22,7 +22,7 @@ class Hero(object):
     @property
     def against_winrate(self):
         try:
-            return  (self.against_win / self.against_games) * 100
+            return (self.against_win / self.against_games) * 100
         except ZeroDivisionError:
             return 0
 

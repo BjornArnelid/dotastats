@@ -5,10 +5,10 @@ class QuantityPerspective(object):
                 yield ban
 
     def sort_picks(self, hero):
-        return (hero.games, hero.winrate, hero.against_games, 100-hero.against_winrate)
+        return hero.games, hero.winrate, hero.against_games, 100-hero.against_winrate
     
     def sort_bans(self, hero):
-        return (hero.against_games, 100-hero.against_winrate, -1*hero.with_games, 100-hero.with_winrate)
+        return hero.against_games, 100-hero.against_winrate, -1*hero.with_games, 100-hero.with_winrate
 
 
 class WinratePerspective(object):
@@ -18,10 +18,10 @@ class WinratePerspective(object):
                 yield ban
 
     def sort_picks(self, hero):
-        return (hero.winrate, hero.games, 100-hero.against_winrate, hero.against_games)
+        return hero.winrate, hero.games, 100-hero.against_winrate, hero.against_games
     
     def sort_bans(self, hero):
-        return (100-hero.against_winrate, hero.against_games, 100-hero.with_winrate, -1*hero.with_games)
+        return 100-hero.against_winrate, hero.against_games, 100-hero.with_winrate, -1*hero.with_games
 
 
 class DiffPerspective(object):
@@ -31,10 +31,10 @@ class DiffPerspective(object):
                 yield ban
 
     def sort_picks(self, hero):
-        return (hero.diff, hero.games,-1*hero.against_diff, hero.against_games)
+        return hero.diff, hero.games,-1*hero.against_diff, hero.against_games
     
     def sort_bans(self, hero):
-        return (-1*hero.against_diff, hero.against_games, -1*hero.with_diff, -1*hero.with_games)
+        return -1*hero.against_diff, hero.against_games, -1*hero.with_diff, -1*hero.with_games
 
     def diff_is_worse(self, ban):
         return (not ban.games) or ban.against_diff >= ban.diff
