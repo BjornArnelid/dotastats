@@ -30,8 +30,6 @@ def redirect_picks():
 @application.route('/picks/<player_id>')
 def get_picks(player_id):
     sample = request.args.get('sample')
-    if not sample:
-        sample = 75
     mode = request.args.get('mode')
     sort_order = request.args.get('sortOrder')
     allies = request.args.get('allies')
