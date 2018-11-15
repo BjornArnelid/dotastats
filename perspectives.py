@@ -37,4 +37,4 @@ class DiffPerspective(object):
         return -1*hero.against_diff, hero.against_games, -1*hero.with_diff, -1*hero.with_games
 
     def diff_is_worse(self, ban):
-        return (not ban.games) or ban.against_diff >= ban.diff
+        return (not ban.games) or ban.against_diff <= ban.diff

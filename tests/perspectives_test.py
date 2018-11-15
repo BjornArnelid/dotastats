@@ -51,4 +51,4 @@ def test_ban_by_diff():
 def test_filter_by_diff():
     perspective = DiffPerspective()
     bans = perspective.filter_bans([sample_1, sample_2], 100)
-    assert len(list(bans)) == 2
+    assert not list(bans)
