@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en">
+<br lang="en">
 <head>
-  <title>Pick Suggestions</title>
+  <title>Counter Suggestions</title>
   <style>
 	table, th, td {
       border: 1px solid black;
@@ -12,15 +12,15 @@
     }
   </style>
 </head>
-<body>
+<br>
   {% if mode %}
     <H3> {{mode}} matchmaking </H3>
   {% endif %}
-  Sample size: {{result['sample']}}  win: {{result['avg_win']|round(1)}}%
+Sample size: {{result['sample']}}  win: {{result['avg_win']|round(1)}}% </br>
+Hero {{result['counter_hero']}}
   <table style="width:100%">
     <tr>
       <th>Picks</th>
-      <th>Bans</th>
     </tr>
     {% set picks = result['picks'] %}
     {% set bans = result['bans'] %}
@@ -29,12 +29,7 @@
 		{% if picks[i] %}
 			<td><img src="{{picks[i].icon}}" alt="{{picks[i].name}}"> {{picks[i].name}}  Games:{{picks[i].games}}  Win:{{picks[i].winrate|round(1)}}%</td>
 		{% else %}
-			<td /> 
-		{% endif %}
-		{% if bans[i] %}
-            <td><img src="{{bans[i].icon}}" alt="{{bans[i].name}}"> <a href="/picks/{{id}}/counterpicks/{{bans[i].hero_id}}?{{query}}">{{bans[i].name}}</a>  Games:{{bans[i].against_games}}  Win:{{bans[i].against_winrate|round(1)}}%</td>
-		{% else %}
-			<td /> 
+			<td />
 		{% endif %}
 		</tr>
 	{%- endfor %}
