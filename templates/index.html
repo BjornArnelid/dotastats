@@ -5,9 +5,9 @@
 </head>
 <body>
     <form action="/picks" method="GET">
-    Player ID <input type=text name=id value={{id}}></br>
+    Player ID <input type=text name=id value={{request['id']}}></br>
     Sample size <input type=text name=sample value=75></br>
-    Allies <input type=text name=allies >
+    Allies <input type=text name=allies value="{{request['allies']}}">
     Mode
       <select name="mode">
           <option value="">Significant</option>

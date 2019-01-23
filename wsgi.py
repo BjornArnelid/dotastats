@@ -10,10 +10,7 @@ application = Flask(__name__)
 
 @application.route('/')
 def landing_page():
-    player_id = request.args.get('id')
-    if not player_id:
-        player_id = ''
-    return flask.render_template('index.html', id=player_id)
+    return flask.render_template('index.html', request=request.args)
 
 
 @application.route('/picks', methods=['GET'])
