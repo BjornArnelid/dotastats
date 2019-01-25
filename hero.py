@@ -7,6 +7,7 @@ with open('heroes.json') as f:
 
 DEFAULT = {'localized_name': 'Unknown', 'name': 'unknown'}
 
+
 class Hero(object):
     def __init__(self, hero_stats):
         for k, v in hero_stats.items():
@@ -45,7 +46,6 @@ class Hero(object):
     def with_diff(self):
         return self.with_win * 2 - self.with_games
 
-
     @property
     def name(self):
         hi = get_hero_from_id(self.hero_id)
@@ -68,6 +68,7 @@ def get_hero_from_id(hero_id):
     if not hi:
         hi = DEFAULT
     return hi 
+
 
 def reload_hero_information():
     response = requests.get('https://api.opendota.com/api/heroes')

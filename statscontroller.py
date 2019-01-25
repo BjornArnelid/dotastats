@@ -29,7 +29,7 @@ class StatsController(object):
         elif sort_order == 'quantity':
             perspective = QuantityPerspective()
         else:
-            sort_order = 'diff'
+            # sort_order = 'diff'
             perspective = DiffPerspective()
         picks = [h for h in result['picks'] if h.winrate > result['avg_win']]
         result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
@@ -46,7 +46,7 @@ class StatsController(object):
         elif sort_order == 'quantity':
             perspective = QuantityPerspective()
         else:
-            sort_order = 'diff'
+            # sort_order = 'diff'
             perspective = DiffPerspective()
         picks = [h for h in result['picks'] if h.winrate > result['avg_win']]
         result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
