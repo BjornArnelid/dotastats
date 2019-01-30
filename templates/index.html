@@ -4,9 +4,9 @@
   <title>Choose hero</title>
 </head>
 <body>
-    <form action="/picks" method="GET">
+    <form action="/redirect" method="GET">
     Player ID <input type=text name=id value={{request['id']}}></br>
-    Sample size <input type=text name=sample value=75></br>
+    Sample size <input type=number name=sample value=75></br>
     Allies <input type=text name=allies value="{{request['allies']}}">
     Mode
       <select name="mode">
