@@ -54,6 +54,23 @@ class StatsController(object):
         result['counter_hero'] = get_hero_from_id(hero_id)['localized_name']
         return result
 
+    def get_synergy(self, hero_id, sort_order):
+        response = requests.get(self.request_string + '&with_hero_id=%s' % hero_id)
+        input_data = json.loads(response.text)
+        result = _parse_input_data(input_data)
+        if sort_order == 'winrate':
+            perspective = WinratePerspective()
+        elif sort_order == 'quantity':
+            perspective = QuantityPerspective()
+        else:
+            # sort_order = 'diff'
+            perspective = DiffPerspective()
+        picks = [h for h in result['picks'] if h.winrate > result['avg_win'] and h.hero_id != hero_id]
+        result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
+        del result['bans']
+        result['counter_hero'] = get_hero_from_id(hero_id)['localized_name']
+        return result
+
 
 def _parse_input_data(input_data):
     games = 0

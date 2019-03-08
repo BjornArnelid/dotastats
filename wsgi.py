@@ -55,5 +55,19 @@ def get_counters(player_id, hero_id):
         flask.abort(415)
 
 
+@application.route('/<player_id>/synergies/<hero_id>')
+def get_synergies(player_id, hero_id):
+    try:
+        controller = StatsController(player_id, request.args)
+        result = controller.get_synergy(hero_id, request.args.get('sortOrder'))
+    except (TypeError, ZeroDivisionError):
+        flask.abort(422)
+    if request.accept_mimetypes.accept_html:
+        return flask.render_template('counters.html', result=result, id=player_id, mode=request.args.get('mode'), query=request.query_string.decode('UTF-8'))
+    else:
+        flask.abort(415)
+
+    return 'TBD'
+
 if __name__ == '__main__':
         application.run()
