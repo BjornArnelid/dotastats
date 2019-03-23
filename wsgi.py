@@ -1,7 +1,10 @@
+import urllib
+
 import flask
 from flask import Flask
 from flask.globals import request
 from statscontroller import StatsController
+import hero
 from flask.helpers import url_for
 
 
@@ -32,7 +35,8 @@ def get_suggestions(player_id):
     except (TypeError, ZeroDivisionError):
         flask.abort(422)
     if request.accept_mimetypes.accept_html:
-        return flask.render_template('suggestions.html', result=result, id=player_id, mode=request.args.get('mode'), query=request.query_string.decode('UTF-8'))
+        return flask.render_template('suggestions.html', result=result, id=player_id, mode=request.args.get('mode'),
+                                     query=request.query_string.decode('UTF-8'))
     else:
         flask.abort(415)
 
@@ -50,9 +54,17 @@ def get_counters(player_id, hero_id):
     except (TypeError, ZeroDivisionError):
         flask.abort(422)
     if request.accept_mimetypes.accept_html:
-        return flask.render_template('counters.html', result=result, id=player_id, mode=request.args.get('mode'), query=request.query_string.decode('UTF-8'))
+        return flask.render_template('counters.html', result=result, id=player_id, mode=request.args.get('mode'),
+                                     query=request.query_string.decode('UTF-8'), heroes=hero.HERO_INFORMATION.values())
     else:
         flask.abort(415)
+
+
+@application.route('/<player_id>/counters/redirect')
+def redirect_counters(player_id):
+    return flask.redirect(url_for('get_counters',
+                                  player_id=player_id,
+                                  hero_id=request.values['counter_id']) + '?' + request.values['query'])
 
 
 @application.route('/<player_id>/synergies/<hero_id>')
@@ -63,11 +75,22 @@ def get_synergies(player_id, hero_id):
     except (TypeError, ZeroDivisionError):
         flask.abort(422)
     if request.accept_mimetypes.accept_html:
-        return flask.render_template('counters.html', result=result, id=player_id, mode=request.args.get('mode'), query=request.query_string.decode('UTF-8'))
+        return flask.render_template('synergies.html', result=result, id=player_id, mode=request.args.get('mode'),
+                                     query=request.query_string.decode('UTF-8'), heroes=hero.HERO_INFORMATION.values())
     else:
         flask.abort(415)
 
-    return 'TBD'
+
+@application.route('/<player_id>/synergies/redirect')
+def redirect_synergies(player_id):
+    return flask.redirect(url_for('get_synergies',
+                                  player_id=player_id,
+                                  hero_id=request.values['counter_id']) + '?' + request.values['query'])
+
+
+@application.route('/hello')
+def say_hello():
+    return application.send_static_file('hello.html')
 
 if __name__ == '__main__':
         application.run()

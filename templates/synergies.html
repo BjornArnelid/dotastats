@@ -1,7 +1,7 @@
 <!doctype html>
 <br lang="en">
 <head>
-  <title>Counter Suggestions</title>
+  <title>Synergy Suggestions</title>
   <style>
 	table, th, td {
       border: 1px solid black;
@@ -17,8 +17,8 @@
     <H3> {{mode}} matchmaking </H3>
   {% endif %}
 Sample size: {{result['sample']}}  win: {{result['avg_win']|round(1)}}% </br>
-<Form action="/{{id}}/counters/redirect?{{query}}">
-    Hero
+<Form action="/{{id}}/synergies/redirect?{{query}}">
+    Synergy
     <select name="counter_id">
         {% for h in heroes %}
             {% if h.id|int == result['counter_hero']|int %}
@@ -28,8 +28,8 @@ Sample size: {{result['sample']}}  win: {{result['avg_win']|round(1)}}% </br>
             {% endif %}
         {% endfor %}
     </select>
-    <input type=hidden name="query" value="{{query}}"/>
-    <input type=submit value=Change/>
+    <input type=hidden name="query" value="{{query}}">
+    <input type=submit value=Change>
 </Form>
   <table style="width:100%">
     <tr>

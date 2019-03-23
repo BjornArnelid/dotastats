@@ -51,7 +51,7 @@ class StatsController(object):
         picks = [h for h in result['picks'] if h.winrate > result['avg_win']]
         result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
         del result['bans']
-        result['counter_hero'] = get_hero_from_id(hero_id)['localized_name']
+        result['counter_hero'] = hero_id
         return result
 
     def get_synergy(self, hero_id, sort_order):
@@ -68,7 +68,7 @@ class StatsController(object):
         picks = [h for h in result['picks'] if h.winrate > result['avg_win'] and h.hero_id != hero_id]
         result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
         del result['bans']
-        result['counter_hero'] = get_hero_from_id(hero_id)['localized_name']
+        result['counter_hero'] = hero_id
         return result
 
 

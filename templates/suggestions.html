@@ -27,7 +27,7 @@
 	{% for i in range(10) %}
 		<tr>
 		{% if picks[i] %}
-			<td><img src="{{picks[i].icon}}" alt="{{picks[i].name}}"> <a href="/{{id}}/counters/{{picks[i].hero_id}}?{{query}}">{{picks[i].name}}</a>  Games:{{picks[i].games}}  Win:{{picks[i].winrate|round(1)}}%</td>
+			<td><img src="{{picks[i].icon}}" alt="{{picks[i].name}}"> <a href="/{{id}}/synergies/{{picks[i].hero_id}}?{{query}}">{{picks[i].name}}</a>  Games:{{picks[i].games}}  Win:{{picks[i].winrate|round(1)}}%</td>
 		{% else %}
 			<td /> 
 		{% endif %}
