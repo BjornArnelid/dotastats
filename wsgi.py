@@ -30,7 +30,7 @@ def get_suggestions(player_id):
     try:
         controller = StatsController(player_id, request.args)
         result = controller.get_suggestions(request.args.get('sortOrder'))
-    except (TypeError, ZeroDivisionError):
+    except (TypeError):
         flask.abort(422)
     if request.accept_mimetypes.accept_html:
         return flask.render_template('suggestions.html', result=result, id=player_id, mode=request.args.get('mode'),
@@ -53,7 +53,7 @@ def get_synergies(player_id, hero_id):
         result['sample'] = 0
         result['with'] = controller.get_synergy(hero_id, request.args.get('sortOrder'))
         result['against'] = controller.get_counter(hero_id, request.args.get('sortOrder'))
-    except (TypeError, ZeroDivisionError):
+    except (TypeError):
         flask.abort(422)
     if request.accept_mimetypes.accept_html:
         return flask.render_template('synergies.html', result=result, id=player_id, mode=request.args.get('mode'),

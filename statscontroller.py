@@ -79,5 +79,8 @@ def _parse_input_data(input_data):
             picks.append(h)
         if hero['against_games'] > 0:
             bans.append(h)
-    win_percentage = (wins / int(games)) * 100
+    if games:
+        win_percentage = (wins / games) * 100
+    else:
+        win_percentage = 0
     return {'avg_win': win_percentage, 'sample': games, 'picks': picks, 'bans': bans}
