@@ -57,7 +57,8 @@ def get_synergies(player_id, hero_id):
         flask.abort(422)
     if request.accept_mimetypes.accept_html:
         return flask.render_template('synergies.html', result=result, id=player_id, mode=request.args.get('mode'),
-                                     query=request.query_string.decode('UTF-8'), heroes=hero.HERO_INFORMATION.values())
+                                     query=request.query_string.decode('UTF-8'),
+                                     heroes=sorted(hero.HERO_INFORMATION.values(), key=lambda x: x['localized_name']))
     else:
         flask.abort(415)
 
