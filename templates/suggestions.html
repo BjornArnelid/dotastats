@@ -32,7 +32,7 @@
 			<td /> 
 		{% endif %}
 		{% if bans[i] %}
-            <td><img src="{{bans[i].icon}}" alt="{{bans[i].name}}"> <a href="/{{id}}/counters/{{bans[i].hero_id}}?{{query}}">{{bans[i].name}}</a>  Games:{{bans[i].against_games}}  Win:{{bans[i].against_winrate|round(1)}}%</td>
+            <td><img src="{{bans[i].icon}}" alt="{{bans[i].name}}"> <a href="/{{id}}/synergies/{{bans[i].hero_id}}?{{query}}">{{bans[i].name}}</a>  Games:{{bans[i].against_games}}  Win:{{bans[i].against_winrate|round(1)}}%</td>
 		{% else %}
 			<td /> 
 		{% endif %}

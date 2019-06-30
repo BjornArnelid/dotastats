@@ -49,10 +49,7 @@ class StatsController(object):
             # sort_order = 'diff'
             perspective = DiffPerspective()
         picks = [h for h in result['picks'] if h.winrate > result['avg_win']]
-        result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
-        del result['bans']
-        result['counter_hero'] = hero_id
-        return result
+        return sorted(picks, key=perspective.sort_picks, reverse=True)
 
     def get_synergy(self, hero_id, sort_order):
         response = requests.get(self.request_string + '&with_hero_id=%s' % hero_id)
@@ -66,10 +63,7 @@ class StatsController(object):
             # sort_order = 'diff'
             perspective = DiffPerspective()
         picks = [h for h in result['picks'] if h.winrate > result['avg_win'] and h.hero_id != hero_id]
-        result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
-        del result['bans']
-        result['counter_hero'] = hero_id
-        return result
+        return sorted(picks, key=perspective.sort_picks, reverse=True)
 
 
 def _parse_input_data(input_data):

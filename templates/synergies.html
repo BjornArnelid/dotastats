@@ -16,12 +16,11 @@
   {% if mode %}
     <H3> {{mode}} matchmaking </H3>
   {% endif %}
-Sample size: {{result['sample']}}  win: {{result['avg_win']|round(1)}}% </br>
 <Form action="/{{id}}/synergies/redirect?{{query}}">
     Synergy
-    <select name="counter_id">
+    <select name="synergy_id">
         {% for h in heroes %}
-            {% if h.id|int == result['counter_hero']|int %}
+            {% if h.id|int == result['synergy_id']|int %}
                 <option value={{h.id}} selected>{{h.localized_name}}</option>
             {% else %}
                 <option value={{h.id}}>{{h.localized_name}}</option>
@@ -33,17 +32,25 @@ Sample size: {{result['sample']}}  win: {{result['avg_win']|round(1)}}% </br>
 </Form>
   <table style="width:100%">
     <tr>
-      <th>Picks</th>
+      <th>Picks with</th>
+        <th>Picks against</th>
     </tr>
-    {% set picks = result['picks'] %}
-    {% set bans = result['bans'] %}
+    {% set with_set = result['with'] %}
+    {% set against_set = result['against'] %}
 	{% for i in range(10) %}
 		<tr>
-		{% if picks[i] %}
-			<td><img src="{{picks[i].icon}}" alt="{{picks[i].name}}"> {{picks[i].name}}  Games:{{picks[i].games}}  Win:{{picks[i].winrate|round(1)}}%</td>
+		{% if with_set[i] %}
+			<td><img src="{{with_set[i].icon}}" alt="{{with_set[i].name}}">  <a href="/{{id}}/synergies/{{with_set[i].hero_id}}?{{query}}">{{with_set[i].name}}</a>  Games:{{with_set[i].games}}  Win:{{with_set[i].winrate|round(1)}}%</td>
 		{% else %}
 			<td />
 		{% endif %}
+
+        {% if against_set[i] %}
+			<td><img src="{{against_set[i].icon}}" alt="{{against_set[i].name}}">  <a href="/{{id}}/synergies/{{against_set[i].hero_id}}?{{query}}">{{against_set[i].name}}</a>  Games:{{against_set[i].games}}  Win:{{against_set[i].winrate|round(1)}}%</td>
+		{% else %}
+			<td />
+		{% endif %}
+
 		</tr>
 	{%- endfor %}
   </table>

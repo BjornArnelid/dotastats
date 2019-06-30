@@ -1,5 +1,3 @@
-import urllib
-
 import flask
 from flask import Flask
 from flask.globals import request
@@ -46,32 +44,15 @@ def empty_suggestions():
     return flask.redirect(url_for('landing_page'))
 
 
-@application.route('/<player_id>/counters/<hero_id>')
-def get_counters(player_id, hero_id):
-    try:
-        controller = StatsController(player_id, request.args)
-        result = controller.get_counter(hero_id, request.args.get('sortOrder'))
-    except (TypeError, ZeroDivisionError):
-        flask.abort(422)
-    if request.accept_mimetypes.accept_html:
-        return flask.render_template('counters.html', result=result, id=player_id, mode=request.args.get('mode'),
-                                     query=request.query_string.decode('UTF-8'), heroes=hero.HERO_INFORMATION.values())
-    else:
-        flask.abort(415)
-
-
-@application.route('/<player_id>/counters/redirect')
-def redirect_counters(player_id):
-    return flask.redirect(url_for('get_counters',
-                                  player_id=player_id,
-                                  hero_id=request.values['counter_id']) + '?' + request.values['query'])
-
-
 @application.route('/<player_id>/synergies/<hero_id>')
 def get_synergies(player_id, hero_id):
     try:
         controller = StatsController(player_id, request.args)
-        result = controller.get_synergy(hero_id, request.args.get('sortOrder'))
+        result = {}
+        result['synergy_id'] = hero_id
+        result['sample'] = 0
+        result['with'] = controller.get_synergy(hero_id, request.args.get('sortOrder'))
+        result['against'] = controller.get_counter(hero_id, request.args.get('sortOrder'))
     except (TypeError, ZeroDivisionError):
         flask.abort(422)
     if request.accept_mimetypes.accept_html:
@@ -85,12 +66,8 @@ def get_synergies(player_id, hero_id):
 def redirect_synergies(player_id):
     return flask.redirect(url_for('get_synergies',
                                   player_id=player_id,
-                                  hero_id=request.values['counter_id']) + '?' + request.values['query'])
+                                  hero_id=request.values['synergy_id']) + '?' + request.values['query'])
 
-
-@application.route('/hello')
-def say_hello():
-    return application.send_static_file('hello.html')
 
 if __name__ == '__main__':
         application.run()
