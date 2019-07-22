@@ -4,6 +4,7 @@ from hero import Hero
 
 sample_1 = Hero({"hero_id":"30","last_played":1532238030,"games":5,"win":2,"with_games":4,"with_win":2,"against_games":5,"against_win":4})
 sample_2 = Hero({"hero_id":"21","last_played":1527111232,"games":4,"win":1,"with_games":4,"with_win":2,"against_games":11,"against_win":9})
+sample_3 = Hero({"hero_id":"5","last_played":1563310176,"games":6,"win":6,"with_games":2,"with_win":1,"against_games":7,"against_win":1})
 
 
 def test_pick_by_quantity():
@@ -50,5 +51,5 @@ def test_ban_by_diff():
 
 def test_filter_by_diff():
     perspective = DiffPerspective()
-    bans = perspective.filter_bans([sample_1, sample_2], 100)
+    bans = perspective.filter_bans([sample_1, sample_2, sample_3], 100)
     assert not list(bans)

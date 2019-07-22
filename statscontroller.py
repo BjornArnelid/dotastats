@@ -1,5 +1,6 @@
 import requests
 import json
+import flask
 from perspectives import QuantityPerspective, WinratePerspective, DiffPerspective
 from hero import Hero, get_hero_from_id
 
@@ -22,6 +23,8 @@ class StatsController(object):
 
     def get_suggestions(self, sort_order):
         response = requests.get(self.request_string)
+        if response.status_code is not 200:
+            flask.abort(response.status_code)
         input_data = json.loads(response.text)
         result = _parse_input_data(input_data)
         if sort_order == 'winrate':
