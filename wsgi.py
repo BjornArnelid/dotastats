@@ -48,15 +48,13 @@ def empty_suggestions():
 def get_synergies(player_id, hero_id):
     try:
         controller = StatsController(player_id, request.args)
-        result = {}
-        result['synergy_id'] = hero_id
-        result['sample'] = 0
-        result['with'] = controller.get_synergy(hero_id, request.args.get('sortOrder'))
-        result['against'] = controller.get_counter(hero_id, request.args.get('sortOrder'))
+        with_result = controller.get_synergy(hero_id, request.args.get('sortOrder'), '&with_hero_id=%s')
+        against_result = controller.get_synergy(hero_id, request.args.get('sortOrder'), '&against_hero_id=%s')
     except (TypeError):
         flask.abort(422)
     if request.accept_mimetypes.accept_html:
-        return flask.render_template('synergies.html', result=result, id=player_id, mode=request.args.get('mode'),
+        return flask.render_template('synergies.html', with_result=with_result, against_result=against_result,
+                                     id=player_id, synergy_id=hero_id, mode=request.args.get('mode'),
                                      query=request.query_string.decode('UTF-8'),
                                      heroes=sorted(hero.HERO_INFORMATION.values(), key=lambda x: x['localized_name']))
     else:

@@ -20,7 +20,7 @@
     Synergy
     <select name="synergy_id">
         {% for h in heroes %}
-            {% if h.id|int == result['synergy_id']|int %}
+            {% if h.id|int == synergy_id|int %}
                 <option value={{h.id}} selected>{{h.localized_name}}</option>
             {% else %}
                 <option value={{h.id}}>{{h.localized_name}}</option>
@@ -32,11 +32,13 @@
 </Form>
   <table style="width:100%">
     <tr>
-      <th>Picks with</th>
-        <th>Picks against</th>
+        <th>Picks with<br/>
+            Sample size: {{with_result['sample']}}  win: {{with_result['avg_win']|round(1)}}%</th>
+        <th>Picks against<br/>
+            Sample size: {{against_result['sample']}}  win: {{against_result['avg_win']|round(1)}}%</th>
     </tr>
-    {% set with_set = result['with'] %}
-    {% set against_set = result['against'] %}
+    {% set with_set = with_result['picks'] %}
+    {% set against_set = against_result['picks'] %}
 	{% for i in range(10) %}
 		<tr>
 		{% if with_set[i] %}

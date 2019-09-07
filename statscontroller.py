@@ -40,22 +40,8 @@ class StatsController(object):
         result['bans'] = sorted(bans, key=perspective.sort_bans, reverse=True)
         return result
 
-    def get_counter(self, hero_id, sort_order):
-        response = requests.get(self.request_string + '&against_hero_id=%s' % hero_id)
-        input_data = json.loads(response.text)
-        result = _parse_input_data(input_data)
-        if sort_order == 'winrate':
-            perspective = WinratePerspective()
-        elif sort_order == 'quantity':
-            perspective = QuantityPerspective()
-        else:
-            # sort_order = 'diff'
-            perspective = DiffPerspective()
-        picks = [h for h in result['picks'] if h.winrate > result['avg_win']]
-        return sorted(picks, key=perspective.sort_picks, reverse=True)
-
-    def get_synergy(self, hero_id, sort_order):
-        response = requests.get(self.request_string + '&with_hero_id=%s' % hero_id)
+    def get_synergy(self, hero_id, sort_order, query):
+        response = requests.get(self.request_string + query % hero_id)
         input_data = json.loads(response.text)
         result = _parse_input_data(input_data)
         if sort_order == 'winrate':
@@ -66,7 +52,8 @@ class StatsController(object):
             # sort_order = 'diff'
             perspective = DiffPerspective()
         picks = [h for h in result['picks'] if h.winrate > result['avg_win'] and h.hero_id != hero_id]
-        return sorted(picks, key=perspective.sort_picks, reverse=True)
+        result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
+        return result
 
 
 def _parse_input_data(input_data):
