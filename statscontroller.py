@@ -21,8 +21,8 @@ class StatsController(object):
             attributes += '&included_account_id=%s' % args.get('allies')
         self.request_string = 'https://api.opendota.com/api/players/%s/heroes%s' % (player_id, attributes)
 
-    def get_suggestions(self, sort_order):
-        response = requests.get(self.request_string)
+    def get_suggestions(self, sort_order, query, hero_id):
+        response = requests.get(self.request_string + query + hero_id)
         if response.status_code is not 200:
             flask.abort(response.status_code)
         input_data = json.loads(response.text)
@@ -34,25 +34,11 @@ class StatsController(object):
         else:
             # sort_order = 'diff'
             perspective = DiffPerspective()
-        picks = [h for h in result['picks'] if h.winrate > result['avg_win']]
-        result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
-        bans = perspective.filter_bans(result['bans'], result['avg_win'])
-        result['bans'] = sorted(bans, key=perspective.sort_bans, reverse=True)
-        return result
-
-    def get_synergy(self, hero_id, sort_order, query):
-        response = requests.get(self.request_string + query % hero_id)
-        input_data = json.loads(response.text)
-        result = _parse_input_data(input_data)
-        if sort_order == 'winrate':
-            perspective = WinratePerspective()
-        elif sort_order == 'quantity':
-            perspective = QuantityPerspective()
-        else:
-            # sort_order = 'diff'
-            perspective = DiffPerspective()
         picks = [h for h in result['picks'] if h.winrate > result['avg_win'] and h.hero_id != hero_id]
         result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
+        if not query:
+            bans = perspective.filter_bans(result['bans'], result['avg_win'])
+            result['bans'] = sorted(bans, key=perspective.sort_bans, reverse=True)
         return result
 
 

@@ -29,7 +29,7 @@ def redirect_picks():
 def get_suggestions(player_id):
     try:
         controller = StatsController(player_id, request.args)
-        result = controller.get_suggestions(request.args.get('sortOrder'))
+        result = controller.get_suggestions(request.args.get('sortOrder'), '', '')
     except (TypeError):
         flask.abort(422)
     if request.accept_mimetypes.accept_html:
@@ -48,8 +48,9 @@ def empty_suggestions():
 def get_synergies(player_id, hero_id):
     try:
         controller = StatsController(player_id, request.args)
-        with_result = controller.get_synergy(hero_id, request.args.get('sortOrder'), '&with_hero_id=%s')
-        against_result = controller.get_synergy(hero_id, request.args.get('sortOrder'), '&against_hero_id=%s')
+        with_result = controller.get_suggestions(request.args.get('sortOrder'), '&with_hero_id=', hero_id)
+
+        against_result = controller.get_suggestions(request.args.get('sortOrder'), '&against_hero_id=', hero_id)
     except (TypeError):
         flask.abort(422)
     if request.accept_mimetypes.accept_html:
