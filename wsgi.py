@@ -8,6 +8,7 @@ from json.encoder import JSONEncoder
 
 
 application = Flask(__name__)
+#application.static_folder="static"
 
 
 @application.route('/')
@@ -86,9 +87,8 @@ def redirect_synergies(player_id):
 
 @application.route('/heroes')
 def get_heroes():
-    return flask.jsonify(hero.HERO_INFORMATION)
+    return hero.HERO_INFORMATION
 
 
 if __name__ == '__main__':
         application.run()
-        # application.send_static_file('istatic/pick.html')
