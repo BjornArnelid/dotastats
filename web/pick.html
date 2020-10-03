@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="picks.js"></script>
+<title>Hero picks</title>
+<style>
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+th, td {
+	padding: 15px;
+}
+
+</style>
+</head>
+<body>
+	<form id="submitForm" action="/redirect" method="GET">
+		Player ID <input type=text name=id value="75579712" id="player">
+		<br />
+		Sample size <input type=number name=sample value=75>
+		<br />
+		<select id="heroPick" name="heroPick">
+			<option value="0"></option>
+		</select>
+		<input type="radio" name="query" value="&with_hero_id="> With hero
+		<input type="radio" name="query" value="&against_hero_id="> Against hero
+		<br />
+		Allies <input type=text name=allies value="">
+		Mode <select name="mode">
+			<option value="">Significant</option>
+			<option value="turbo">Turbo</option>
+			<option value="ranked">Ranked</option>
+			<option value="unranked">Unranked</option>
+		</select>
+		Sort <select name="sort">
+			<option value="">Diff</option>
+			<option value="quantity">Quantity</option>
+			<option value="winrate">Winrate</option>
+		</select>
+		<br />
+		<input type=submit value=Get>
+	</form>
+	<br />
+	<table style="width: 100%" id="best">
+	<tHead>
+		<tr>
+			<th style="width: 50%">Best Picks</th>
+			<th style="width: 50%">Best Bans</th>
+		</tr>
+	</tHead>
+	<tBody>
+	</tBody>
+	</table>
+	<br />
+	<table style="width: 100%" id ="worst">
+	<tHead>
+		<tr>
+			<th style="width: 50%">Worst Picks</th>
+			<th style="width: 50%">Worst Bans</th>
+		</tr>
+	</tHead>
+	<tBody>
+	</tBody>
+	</table>
+</body>
+</html>

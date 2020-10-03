@@ -22,8 +22,13 @@ class StatsController(object):
         self.request_string = 'https://api.opendota.com/api/players/%s/heroes%s' % (player_id, attributes)
 
     def get_suggestions(self, sort_order, query, hero_id):
+        if hero_id is None:
+            hero_id = ''
+        if query is None or hero_id == '':
+            query = ''
+
         response = requests.get(self.request_string + query + hero_id)
-        if response.status_code is not 200:
+        if response.status_code != 200:
             flask.abort(response.status_code)
         input_data = json.loads(response.text)
         result = _parse_input_data(input_data)
@@ -34,11 +39,10 @@ class StatsController(object):
         else:
             # sort_order = 'diff'
             perspective = DiffPerspective()
-        picks = [h for h in result['picks'] if h.winrate > result['avg_win'] and h.hero_id != hero_id]
+        picks = [h for h in result['picks'] if h.hero_id != hero_id]
         result['picks'] = sorted(picks, key=perspective.sort_picks, reverse=True)
-        if not query:
-            bans = perspective.filter_bans(result['bans'], result['avg_win'])
-            result['bans'] = sorted(bans, key=perspective.sort_bans, reverse=True)
+        bans = [h for h in result['bans'] if h.hero_id != hero_id]
+        result['bans'] = sorted(bans, key=perspective.sort_bans, reverse=True)
         return result
 
 
@@ -50,7 +54,7 @@ def _parse_input_data(input_data):
     for hero in input_data:
         games += hero['games']
         h = Hero(hero)
-        if hero['win'] > 0:
+        if hero['games'] > 0:
             wins += hero['win']
             picks.append(h)
         if hero['against_games'] > 0:
