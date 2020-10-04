@@ -27,24 +27,14 @@ def redirect_picks():
                                   sortOrder=request.values['sort'],
                                   hero_id=request.values.get('heroPick'),
                                   query=request.values.get('query')))
- 
- 
-class CustomEncoder(JSONEncoder):
-    def default(self, obj):
-        encoded = {}
-        for attr in dir(obj):
-            if not attr.startswith("_"):
-                encoded[attr] = getattr(obj,attr)
-        return encoded
- 
-application.json_encoder = CustomEncoder
+
 
 @application.route('/<player_id>/suggestions')
 def get_suggestions(player_id):
     try:
         controller = StatsController(player_id, request.args)
         result = controller.get_suggestions(request.args.get('sortOrder'), request.args.get('query'), request.args.get('hero_id'))
-    except (TypeError):
+    except TypeError:
         flask.abort(422)
     if request.headers.get('Content-Type') == 'application/json':
         return flask.jsonify(result)
