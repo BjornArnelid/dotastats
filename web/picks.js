@@ -46,6 +46,7 @@ $(document).on('submit', 'form', function(e) {
 				$("#worst").find("tBody").append(row);
 			}
 
+            $("#winPercentage").text("Win: " + Math.round(result['avg_win']) + "%")
 		}
 	}, 'json');
 	e.preventDefault();
@@ -53,12 +54,22 @@ $(document).on('submit', 'form', function(e) {
 
 $(document).ready(function(){
 	$("table tBody").on('click', 'td', function(e) {
-        var hero_id = $(e.target).attr('id');
-        $("#heroPick").val(hero_id);
-	    $("#submitForm").submit();
-	///{{id}}/synergies/{{picks[i].hero_id}}?{{query}}
+        if (!$("input[name='query']:checked").val()) {
+            alert('You must select "With hero" or "Against hero".');
+        } else {
+            var hero_id = $(e.target).attr('id');
+            $("#heroPick").val(hero_id);
+	        $("#submitForm").submit();
+
+}
 
 	});
+
+	$("#heroPick").on('change', function() {
+	    if ($("#heroPick").val() == 0) {
+	        $('input[name="query"]').prop('checked', false);
+	    }
+    });
 });
 
 $.getJSON("/heroes", function(data) {

@@ -17,10 +17,17 @@ class CustomEncoder(JSONEncoder):
         return encoded
 
 
+# Production build
+# This should be uncommented in production
 application = Flask(__name__)
-#application = Flask(__name__, static_url_path='')
+
+# Development build
+# This should be uncommented in develop
+# application = Flask(__name__, static_url_path='')
+# application.static_folder = "web"
+
 application.json_encoder = CustomEncoder
-#application.static_folder = "web"
+
 
 
 @application.route('/')
