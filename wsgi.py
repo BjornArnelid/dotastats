@@ -1,14 +1,26 @@
 import flask
 from flask import Flask
 from flask.globals import request
+from flask.json import JSONEncoder
+
 from statscontroller import StatsController
 import hero
 from flask.helpers import url_for
-from json.encoder import JSONEncoder
+
+
+class CustomEncoder(JSONEncoder):
+    def default(self, obj):
+        encoded = {}
+        for attr in dir(obj):
+            if not attr.startswith("_"):
+                encoded[attr] = getattr(obj, attr)
+        return encoded
 
 
 application = Flask(__name__)
-#application.static_folder="static"
+#application = Flask(__name__, static_url_path='')
+application.json_encoder = CustomEncoder
+#application.static_folder = "web"
 
 
 @application.route('/')

@@ -2,15 +2,6 @@ import json
 import requests
 
 
-class CustomEncoder(json.JSONEncoder):
-    def default(self, obj):
-        encoded = {}
-        for attr in dir(obj):
-            if not attr.startswith("_"):
-                encoded[attr] = getattr(obj,attr)
-        return encoded
-
-
 with open('heroes.json') as f:
     HERO_INFORMATION = json.load(f)
 
@@ -86,4 +77,4 @@ def reload_hero_information():
     for data in input_data:
         HERO_INFORMATION[str(data['id'])] = data
     with open('heroes.json',  'w') as f:
-        json.dump(HERO_INFORMATION, f, cls=CustomEncoder)
+        json.dump(HERO_INFORMATION, f)
