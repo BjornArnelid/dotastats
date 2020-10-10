@@ -9,7 +9,6 @@ $(document).on('submit', 'form', function(e) {
 		type: $(this).attr('method'),
 		data: $(this).serialize(),
 		success: function(result) {
-			$("table tBody").empty()
 			var bestPicks = result['picks'].slice(0,result['picks'].length/2);
 			var bestBans = result['bans'].slice(0,result['bans'].length/2);
 			for(var i=0; i < 5; i++) {
@@ -52,23 +51,30 @@ $(document).on('submit', 'form', function(e) {
 	e.preventDefault();
 });
 
-$(document).ready(function(){
+$(document).ready(function() {
 	$("table tBody").on('click', 'td', function(e) {
         if (!$("input[name='query']:checked").val()) {
             alert('You must select "With hero" or "Against hero".');
         } else {
             var hero_id = $(e.target).attr('id');
             $("#heroPick").val(hero_id);
+            $("table tBody").empty();
 	        $("#submitForm").submit();
-
-}
-
+        }
 	});
 
 	$("#heroPick").on('change', function() {
 	    if ($("#heroPick").val() == 0) {
 	        $('input[name="query"]').prop('checked', false);
 	    }
+    });
+
+    $("table tBody").mouseover(function(e){
+        $(e).css("background-color", "yellow");
+    });
+
+    $("#submitButton").on('click', function() {
+        $("table tBody").empty();
     });
 });
 
