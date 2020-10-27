@@ -96,8 +96,9 @@ def redirect_synergies(player_id):
 
 @application.route('/heroes')
 def get_heroes():
-    return flask.jsonify(hero.HERO_INFORMATION)
+    heroes = sorted(hero.HERO_INFORMATION.values(), key=lambda h: h['localized_name'])
+    return flask.jsonify(heroes)
 
 
 if __name__ == '__main__':
-        application.run()
+    application.run()
