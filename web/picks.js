@@ -80,7 +80,7 @@ $(document).ready(function() {
 
 $.getJSON("/heroes", function(data) {
     for (var h in data) {
-        $("#heroPick").append(new Option(data[h].localized_name, h));
+        $("#heroPick").append(new Option(data[h].localized_name, data[h].id));
     }
 });
 
